@@ -1,164 +1,170 @@
-import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-type CounterApp = {
-  addBy?: number;
-};
+export default function App() {
+  const [num1, setNum1] = useState("");
+  const [num2, setNum2] = useState("");
+  const [result, setResult] = useState("");
+  const [message, setMessage] = useState("");
 
-function CounterApp({ addBy = 1 }: CounterApp) {
-  const [count, setCount] = useState(0);
+  const checkInputs = () => {
+    if (num1 === "" || num2 === "") {
+      setResult("");
+      setMessage("Please enter two numbers.");
+      return false;
+    }
 
-  const handleIncrement = () => {
-    setCount((currentCount) => currentCount + addBy);
+    if (isNaN(Number(num1)) || isNaN(Number(num2))) {
+      setResult("");
+      setMessage("Invalid input. Numbers only.");
+      return false;
+    }
+
+    return true;
   };
 
-  const handleDecrement = () => {
-    setCount((currentCount) => Math.max(0, currentCount - addBy));
+  const addNumbers = () => {
+    if (!checkInputs()) {
+      return;
+    }
+
+    const answer = Number(num1) + Number(num2);
+    setResult(answer.toString());
+    setMessage("");
   };
 
-  const handleReset = () => {
-    setCount(0);
+  const subtractNumbers = () => {
+    if (!checkInputs()) {
+      return;
+    }
+
+    const answer = Number(num1) - Number(num2);
+    setResult(answer.toString());
+    setMessage("");
+  };
+
+  const multiplyNumbers = () => {
+    if (!checkInputs()) {
+      return;
+    }
+
+    const answer = Number(num1) * Number(num2);
+    setResult(answer.toString());
+    setMessage("");
+  };
+
+  const divideNumbers = () => {
+    if (!checkInputs()) {
+      return;
+    }
+
+    if (Number(num2) === 0) {
+      setResult("");
+      setMessage("Cannot divide by zero.");
+      return;
+    }
+
+    const answer = Number(num1) / Number(num2);
+    setResult(answer.toString());
+    setMessage("");
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Counter App</Text>
-      <Text style={styles.counterValue}>{count}</Text>
-      <Text style={styles.helperText}>Add value: {addBy}</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.box}>
+        <Text style={styles.title}>Calculator</Text>
 
-      <View style={styles.buttonRow}>
-        <Pressable
-          accessibilityRole="button"
-          disabled={count === 0}
-          onPress={handleDecrement}
-          style={({ pressed }) => [
-            styles.button,
-            styles.secondaryButton,
-            count === 0 && styles.disabledButton,
-            pressed && count > 0 && styles.pressedButton,
-          ]}
-        >
-          <Text style={styles.buttonText}>-</Text>
-        </Pressable>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter first number"
+          keyboardType="numeric"
+          value={num1}
+          onChangeText={setNum1}
+        />
 
-        <Pressable
-          accessibilityRole="button"
-          onPress={handleReset}
-          style={({ pressed }) => [
-            styles.button,
-            styles.resetButton,
-            pressed && styles.pressedButton,
-          ]}
-        >
-          <Text style={styles.buttonText}>Reset</Text>
-        </Pressable>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter second number"
+          keyboardType="numeric"
+          value={num2}
+          onChangeText={setNum2}
+        />
 
-        <Pressable
-          accessibilityRole="button"
-          onPress={handleIncrement}
-          style={({ pressed }) => [
-            styles.button,
-            styles.primaryButton,
-            pressed && styles.pressedButton,
-          ]}
-        >
-          <Text style={styles.buttonText}>+</Text>
-        </Pressable>
+        <TouchableOpacity style={styles.button} onPress={addNumbers}>
+          <Text style={styles.buttonText}>Add</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={subtractNumbers}>
+          <Text style={styles.buttonText}>Subtract</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={multiplyNumbers}>
+          <Text style={styles.buttonText}>Multiply</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={divideNumbers}>
+          <Text style={styles.buttonText}>Divide</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.result}>Result: {result}</Text>
+        <Text style={styles.message}>{message}</Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
-}
-
-export default function HomeScreen() {
-  return <CounterApp addBy={1} />;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFFFFF",
-    gap: 12,
     padding: 20,
+    backgroundColor: "#EEEEEE",
+  },
+  box: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
-    color: "#000000",
+    textAlign: "center",
+    marginBottom: 20,
   },
-  counterValue: {
-    fontSize: 48,
-    fontWeight: "bold",
-    color: "#000000",
-  },
-  helperText: {
-    fontSize: 14,
-    color: "#000000",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    gap: 8,
+  input: {
+    borderWidth: 1,
+    borderColor: "#999999",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
   },
   button: {
-    alignItems: "center",
-    justifyContent: "center",
-    minWidth: 60,
-    height: 40,
-    borderWidth: 1,
-    borderColor: "#000000",
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 12,
-  },
-  primaryButton: {
-    backgroundColor: "#FFFFFF",
-  },
-  secondaryButton: {
-    backgroundColor: "#FFFFFF",
-  },
-  resetButton: {
-    backgroundColor: "#FFFFFF",
-  },
-  disabledButton: {
-    opacity: 0.4,
-  },
-  pressedButton: {
-    opacity: 0.6,
+    backgroundColor: "#007BFF",
+    padding: 12,
+    marginBottom: 10,
+    borderRadius: 5,
   },
   buttonText: {
-    fontSize: 16,
-    color: "#000000",
+    color: "white",
+    textAlign: "center",
+    fontWeight: "bold",
   },
-  taskContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
+  result: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 10,
   },
-  checkboxIcon: {
-    fontSize: 18,
-    marginRight: 10,
-  },
-  taskTextContainer: {
-    flex: 1,
-  },
-  taskTitle: {
-    fontSize: 14,
-    color: '#333',
-  },
-  taskDone: {
-    textDecorationLine: 'line-through',
-    color: '#888',
-  },
-  taskDate: {
-    fontSize: 12,
-    color: '#888',
-  },
-  deleteButton: {
-    padding: 6,
-  },
-  deleteText: {
-    fontSize: 12,
-    color: '#FF4A4A',
-    fontWeight: '600',
+  message: {
+    color: "red",
+    textAlign: "center",
+    marginTop: 10,
   },
 });
