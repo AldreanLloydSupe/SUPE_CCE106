@@ -129,4 +129,36 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
   },
+  taskContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  checkboxIcon: {
+    fontSize: 18,
+    marginRight: 10,
+  },
+  taskTextContainer: {
+    flex: 1,
+  },
+  taskTitle: {
+    fontSize: 14,
+    color: '#333',
+  },
+  taskDone: {
+    textDecorationLine: 'line-through',
+    color: '#888',
+  },
+  taskDate: {
+    fontSize: 12,
+    color: '#888',
+  },
+  deleteButton: {
+    padding: 6,
+  },
+  deleteText: {
+    fontSize: 12,
+    color: '#FF4A4A',
+    fontWeight: '600',
+  },
 });
