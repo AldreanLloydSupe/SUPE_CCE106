@@ -1,73 +1,132 @@
-import { Image } from "expo-image";
-import { StyleSheet, Text } from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import ParallaxScrollView from "@/components/parallax-scroll-view";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
+type CounterApp = {
+  addBy?: number;
+};
 
-export default function HomeScreen() {
+function CounterApp({ addBy = 1 }: CounterApp) {
+  const [count, setCount] = useState(0);
+
+  const handleIncrement = () => {
+    setCount((currentCount) => currentCount + addBy);
+  };
+
+  const handleDecrement = () => {
+    setCount((currentCount) => Math.max(0, currentCount - addBy));
+  };
+
+  const handleReset = () => {
+    setCount(0);
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image source={require("@/assets/images/partial-react-logo.png")} />
-      }
-    >
-      <ThemedView style={styles.content}>
-        <ThemedText style={styles.title}>App title: Bai</ThemedText>
-        <ThemedText style={styles.myName}>
-          Student name: Aldrean Lloyd Supe
-        </ThemedText>
-        <ThemedText style={styles.myYear}>
-          Course/Section: BSIT 3rd Year
-        </ThemedText>
-        <ThemedText style={styles.idea}>
-          Short app idea: Simple React Native app
-        </ThemedText>
-        <Text></Text>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View style={styles.container}>
+      <Text style={styles.title}>Counter App</Text>
+      <Text style={styles.counterValue}>{count}</Text>
+      <Text style={styles.helperText}>Add value: {addBy}</Text>
+
+      <View style={styles.buttonRow}>
+        <Pressable
+          accessibilityRole="button"
+          disabled={count === 0}
+          onPress={handleDecrement}
+          style={({ pressed }) => [
+            styles.button,
+            styles.secondaryButton,
+            count === 0 && styles.disabledButton,
+            pressed && count > 0 && styles.pressedButton,
+          ]}
+        >
+          <Text style={styles.buttonText}>-</Text>
+        </Pressable>
+
+        <Pressable
+          accessibilityRole="button"
+          onPress={handleReset}
+          style={({ pressed }) => [
+            styles.button,
+            styles.resetButton,
+            pressed && styles.pressedButton,
+          ]}
+        >
+          <Text style={styles.buttonText}>Reset</Text>
+        </Pressable>
+
+        <Pressable
+          accessibilityRole="button"
+          onPress={handleIncrement}
+          style={({ pressed }) => [
+            styles.button,
+            styles.primaryButton,
+            pressed && styles.pressedButton,
+          ]}
+        >
+          <Text style={styles.buttonText}>+</Text>
+        </Pressable>
+      </View>
+    </View>
   );
 }
 
+export default function HomeScreen() {
+  return <CounterApp addBy={1} />;
+}
+
 const styles = StyleSheet.create({
-  content: {
-    gap: 8,
-    padding: 16,
-    borderWidth: 2,
-    borderColor: "#D6DEE2",
-    borderRadius: 10,
-    width: "100%",
-    position: "relative",
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#FFFFFF",
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.18,
-    shadowRadius: 8,
-    elevation: 4,
+    gap: 12,
+    padding: 20,
   },
   title: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
+    color: "#000000",
+  },
+  counterValue: {
+    fontSize: 48,
+    fontWeight: "bold",
+    color: "#000000",
+  },
+  helperText: {
+    fontSize: 14,
+    color: "#000000",
+  },
+  buttonRow: {
+    flexDirection: "row",
+    gap: 8,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    minWidth: 60,
+    height: 40,
+    borderWidth: 1,
+    borderColor: "#000000",
     backgroundColor: "#FFFFFF",
-    borderWidth: 2,
-    borderColor: "#101820",
-    borderStyle: "solid",
-    borderRadius: 10,
-    padding: 10,
-    color: "#101820",
+    paddingHorizontal: 12,
   },
-  myName: {
-    fontSize: 16,
-    color: "#182026",
-    textDecorationLine: "underline",
+  primaryButton: {
+    backgroundColor: "#FFFFFF",
   },
-  myYear: {
-    fontSize: 16,
-    color: "#182026",
+  secondaryButton: {
+    backgroundColor: "#FFFFFF",
   },
-  idea: {
+  resetButton: {
+    backgroundColor: "#FFFFFF",
+  },
+  disabledButton: {
+    opacity: 0.4,
+  },
+  pressedButton: {
+    opacity: 0.6,
+  },
+  buttonText: {
     fontSize: 16,
-    color: "#182026",
+    color: "#000000",
   },
 });
