@@ -1,5 +1,6 @@
-import { Link, type RelativePathString } from "expo-router";
+import { Link } from "expo-router";
 import React from "react";
+import { MaterialIcons } from "@expo/vector-icons";
 import {
   Pressable,
   SafeAreaView,
@@ -10,216 +11,117 @@ import {
 } from "react-native";
 
 const courses = [
-  {
-    id: "expo-router",
-    title: "Expo Router",
-    detail: "Build multi-screen apps with file-based navigation.",
-  },
-  {
-    id: "react-native",
-    title: "React Native",
-    detail: "Create beautiful native interfaces with JavaScript.",
-  },
+  { title: "Mobile Development", subtitle: "React Native fundamentals", progress: 82, color: "#4F7DF3", icon: "phone-iphone" as const },
+  { title: "Database Systems", subtitle: "SQL and data modelling", progress: 46, color: "#20B39C", icon: "storage" as const },
+  { title: "Web Development", subtitle: "Modern frontend patterns", progress: 64, color: "#F19A4A", icon: "language" as const },
 ];
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.eyebrow}>STUDENT PORTAL</Text>
-        <Text style={styles.title}>Welcome back, Aldrean!</Text>
-        <Text style={styles.subtitle}>
-          Keep learning and stay on track with your courses.
-        </Text>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.container}>
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.kicker}>THURSDAY, SEPTEMBER 10</Text>
+            <Text style={styles.title}>Good morning, Aldrean</Text>
+            <Text style={styles.subtitle}>Let&apos;s make today count.</Text>
+          </View>
+          <Link href="/(tabs)/profile" asChild>
+            <Pressable style={styles.avatar} accessibilityLabel="Open profile">
+              <Text style={styles.avatarText}>AL</Text>
+            </Pressable>
+          </Link>
+        </View>
 
-        <Link href="/(tabs)/profile" asChild>
-          <Pressable style={styles.profileCard}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>A</Text>
-            </View>
-            <View style={styles.profileCopy}>
-              <Text style={styles.profileLabel}>YOUR PROFILE</Text>
-              <Text style={styles.profileName}>Aldrean Lloyd Supe</Text>
-              <Text style={styles.profileDetail}>Information Technology · 3rd year</Text>
-            </View>
-          </Pressable>
-        </Link>
-
-        <Text style={styles.sectionTitle}>Student information</Text>
-        <View style={styles.infoCard}>
-          <View style={styles.infoRow}>
+        <View style={styles.overviewCard}>
+          <View style={styles.overviewTop}>
             <View>
-              <Text style={styles.infoLabel}>STUDENT ID</Text>
-              <Text style={styles.infoValue}>143998</Text>
+              <Text style={styles.overviewLabel}>YOUR LEARNING OVERVIEW</Text>
+              <Text style={styles.overviewTitle}>You&apos;re doing great</Text>
             </View>
-            <View style={styles.infoRight}>
-              <Text style={styles.infoLabel}>SUBJECTS</Text>
-              <Text style={styles.infoValue}>6</Text>
+            <View style={styles.streakBadge}>
+              <MaterialIcons name="local-fire-department" size={17} color="#F19A4A" />
+              <Text style={styles.streakText}>7 day streak</Text>
             </View>
           </View>
-          <View style={styles.infoRow}>
-            <View>
-              <Text style={styles.infoLabel}>PROGRAM</Text>
-              <Text style={styles.infoValue}>Information Technology</Text>
-            </View>
-            <View style={styles.infoRight}>
-              <Text style={styles.infoLabel}>YEAR</Text>
-              <Text style={styles.infoValue}>3rd</Text>
-            </View>
+          <View style={styles.statsRow}>
+            <Stat value="3.82" label="Current GPA" />
+            <Stat value="68%" label="Avg. progress" />
+            <Stat value="6" label="Subjects" />
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Continue learning</Text>
-        {courses.map((course) => (
-          <Link
-            key={course.id}
-            href={{
-              pathname: "/course/[id]" as RelativePathString,
-              params: { id: course.id },
-            }}
-            asChild
-          >
+        <SectionHeading title="Continue learning" action="View all" href="/(tabs)/explore" />
+        {courses.slice(0, 2).map((course) => (
+          <Link key={course.title} href={{ pathname: "/course/[id]", params: { id: course.title.toLowerCase().replaceAll(" ", "-") } }} asChild>
             <Pressable style={styles.courseCard}>
-              <View style={styles.courseIcon}>
-                <Text style={styles.bookIcon}>▣</Text>
+              <View style={[styles.courseIcon, { backgroundColor: `${course.color}18` }]}>
+                <MaterialIcons name={course.icon} size={23} color={course.color} />
               </View>
               <View style={styles.courseCopy}>
                 <Text style={styles.courseTitle}>{course.title}</Text>
-                <Text style={styles.courseDetail}>{course.detail}</Text>
+                <Text style={styles.courseSubtitle}>{course.subtitle}</Text>
+                <View style={styles.progressTrack}><View style={[styles.progressFill, { width: `${course.progress}%`, backgroundColor: course.color }]} /></View>
+                <Text style={styles.progressText}>{course.progress}% complete</Text>
               </View>
-              <Text style={styles.chevron}>›</Text>
+              <MaterialIcons name="chevron-right" size={24} color="#A1AEC1" />
             </Pressable>
           </Link>
         ))}
 
-        <Text style={styles.sectionTitle}>Quick links</Text>
-        <Link href={"/student/143998" as RelativePathString} asChild>
-          <Pressable style={styles.linkRow}>
-            <Text style={styles.linkText}>View your student profile</Text>
-            <Text style={styles.chevron}>›</Text>
-          </Pressable>
-        </Link>
+        <SectionHeading title="Up next" action="See schedule" />
+        <View style={styles.scheduleCard}>
+          <View style={styles.dateBox}><Text style={styles.dateDay}>12</Text><Text style={styles.dateMonth}>SEP</Text></View>
+          <View style={styles.scheduleCopy}><Text style={styles.scheduleTitle}>Database Systems quiz</Text><Text style={styles.scheduleSubtitle}>Saturday · 10:00 AM · Room 204</Text></View>
+          <View style={styles.dueBadge}><Text style={styles.dueText}>Due soon</Text></View>
+        </View>
+
+        <Text style={styles.sectionTitle}>Quick actions</Text>
+        <View style={styles.quickGrid}>
+          <QuickAction icon="calendar-month" label="Schedule" />
+          <QuickAction icon="bar-chart" label="Grades" />
+          <QuickAction icon="badge" label="Student ID" />
+          <QuickAction icon="support-agent" label="Help desk" />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
+function Stat({ value, label }: { value: string; label: string }) {
+  return <View style={styles.stat}><Text style={styles.statValue}>{value}</Text><Text style={styles.statLabel}>{label}</Text></View>;
+}
+
+function SectionHeading({ title, action, href }: { title: string; action: string; href?: "/(tabs)/explore" }) {
+  return <View style={styles.sectionHeading}><Text style={styles.sectionTitle}>{title}</Text>{href ? <Link href={href} style={styles.sectionAction}>{action}</Link> : <Text style={styles.sectionAction}>{action}</Text>}</View>;
+}
+
+function QuickAction({ icon, label }: { icon: React.ComponentProps<typeof MaterialIcons>["name"]; label: string }) {
+  return <Pressable style={styles.quickAction}><View style={styles.quickIcon}><MaterialIcons name={icon} size={21} color="#4F7DF3" /></View><Text style={styles.quickLabel}>{label}</Text></Pressable>;
+}
+
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: "#f7f9fc" },
-  container: { padding: 24, paddingBottom: 40 },
-  eyebrow: {
-    color: "#3f77d4",
-    fontSize: 12,
-    fontWeight: "800",
-    letterSpacing: 1.2,
-    marginTop: 12,
-  },
-  title: { color: "#13233f", fontSize: 32, fontWeight: "800", marginTop: 12 },
-  subtitle: { color: "#687994", fontSize: 16, lineHeight: 24, marginTop: 8 },
-  profileCard: {
-    backgroundColor: "#fff",
-    borderRadius: 18,
-    padding: 16,
-    marginTop: 28,
-    flexDirection: "row",
-    alignItems: "center",
-    shadowColor: "#1d3960",
-    shadowOpacity: 0.07,
-    shadowRadius: 10,
-    elevation: 2,
-  },
-  avatar: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
-    backgroundColor: "#dceaff",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  avatarText: { color: "#2667c7", fontSize: 24, fontWeight: "800" },
-  profileCopy: { flex: 1, marginLeft: 14 },
-  profileLabel: {
-    color: "#3f77d4",
-    fontSize: 12,
-    fontWeight: "800",
-    letterSpacing: 1,
-  },
-  profileName: {
-    color: "#1a2b49",
-    fontSize: 18,
-    fontWeight: "800",
-    marginTop: 3,
-  },
-  profileDetail: { color: "#74839b", fontSize: 13, marginTop: 3 },
-  sectionTitle: {
-    color: "#172a4b",
-    fontSize: 20,
-    fontWeight: "800",
-    marginTop: 30,
-    marginBottom: 14,
-  },
-  infoCard: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    paddingHorizontal: 18,
-    shadowColor: "#1d3960",
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 1,
-  },
-  infoRow: {
-    minHeight: 76,
-    borderBottomWidth: 1,
-    borderBottomColor: "#edf0f5",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  infoRight: { minWidth: 82 },
-  infoLabel: {
-    color: "#8390a3",
-    fontSize: 11,
-    fontWeight: "800",
-    letterSpacing: 0.8,
-  },
-  infoValue: { color: "#1f3354", fontSize: 15, fontWeight: "700", marginTop: 5 },
-  courseCard: {
-    backgroundColor: "#fff",
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    shadowColor: "#1d3960",
-    shadowOpacity: 0.07,
-    shadowRadius: 10,
-    elevation: 2,
-  },
-  courseIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 14,
-    backgroundColor: "#e6f0ff",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  bookIcon: { color: "#2873dc", fontSize: 25 },
-  courseCopy: { flex: 1, marginLeft: 14 },
-  courseTitle: { color: "#1a2b49", fontSize: 16, fontWeight: "800" },
-  courseDetail: {
-    color: "#74839b",
-    fontSize: 13,
-    lineHeight: 18,
-    marginTop: 4,
-  },
-  chevron: { color: "#3975cf", fontSize: 30, fontWeight: "300", marginLeft: 8 },
-  linkRow: {
-    backgroundColor: "#fff",
-    borderRadius: 14,
-    padding: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  linkText: { color: "#2d66bd", fontSize: 15, fontWeight: "700" },
+  safeArea: { flex: 1, backgroundColor: "#F5F7FB" },
+  container: { padding: 20, paddingBottom: 40 },
+  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 },
+  kicker: { color: "#8491A7", fontSize: 11, fontWeight: "800", letterSpacing: 1.1 },
+  title: { color: "#14213D", fontSize: 26, fontWeight: "800", marginTop: 8 },
+  subtitle: { color: "#718096", fontSize: 15, marginTop: 5 },
+  avatar: { width: 48, height: 48, borderRadius: 24, backgroundColor: "#DDE7FF", alignItems: "center", justifyContent: "center" },
+  avatarText: { color: "#3567D6", fontSize: 15, fontWeight: "800" },
+  overviewCard: { backgroundColor: "#182A50", borderRadius: 22, padding: 20, shadowColor: "#172B50", shadowOpacity: 0.18, shadowRadius: 14, elevation: 5 },
+  overviewTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
+  overviewLabel: { color: "#AFC2EC", fontSize: 10, fontWeight: "800", letterSpacing: 1 },
+  overviewTitle: { color: "#FFF", fontSize: 19, fontWeight: "800", marginTop: 7 },
+  streakBadge: { backgroundColor: "#FFFFFF18", borderRadius: 14, paddingHorizontal: 9, paddingVertical: 7, flexDirection: "row", alignItems: "center", gap: 4 },
+  streakText: { color: "#FFF", fontSize: 11, fontWeight: "700" },
+  statsRow: { flexDirection: "row", borderTopWidth: 1, borderTopColor: "#FFFFFF1A", marginTop: 20, paddingTop: 16 },
+  stat: { flex: 1 }, statValue: { color: "#FFF", fontSize: 22, fontWeight: "800" }, statLabel: { color: "#AFC2EC", fontSize: 11, marginTop: 4 },
+  sectionHeading: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 28, marginBottom: 12 },
+  sectionTitle: { color: "#172A4B", fontSize: 18, fontWeight: "800" }, sectionAction: { color: "#4F7DF3", fontSize: 13, fontWeight: "700" },
+  courseCard: { backgroundColor: "#FFF", borderRadius: 18, padding: 15, marginBottom: 11, flexDirection: "row", alignItems: "center", shadowColor: "#21365C", shadowOpacity: 0.05, shadowRadius: 9, elevation: 2 },
+  courseIcon: { width: 47, height: 47, borderRadius: 14, alignItems: "center", justifyContent: "center" }, courseCopy: { flex: 1, marginLeft: 13 }, courseTitle: { color: "#1B2E50", fontSize: 15, fontWeight: "800" }, courseSubtitle: { color: "#8793A7", fontSize: 12, marginTop: 3 },
+  progressTrack: { height: 6, borderRadius: 3, backgroundColor: "#EDF0F5", marginTop: 10, overflow: "hidden" }, progressFill: { height: 6, borderRadius: 3 }, progressText: { color: "#8793A7", fontSize: 10, marginTop: 5 },
+  scheduleCard: { backgroundColor: "#FFF", borderRadius: 18, padding: 15, flexDirection: "row", alignItems: "center", shadowColor: "#21365C", shadowOpacity: 0.05, shadowRadius: 9, elevation: 2 }, dateBox: { backgroundColor: "#FFF1E4", borderRadius: 13, width: 49, height: 53, alignItems: "center", justifyContent: "center" }, dateDay: { color: "#E17C2C", fontSize: 20, fontWeight: "800" }, dateMonth: { color: "#E17C2C", fontSize: 10, fontWeight: "800", marginTop: 1 }, scheduleCopy: { flex: 1, marginLeft: 13 }, scheduleTitle: { color: "#1B2E50", fontSize: 14, fontWeight: "800" }, scheduleSubtitle: { color: "#8793A7", fontSize: 11, marginTop: 5 }, dueBadge: { backgroundColor: "#FFF1E4", paddingHorizontal: 8, paddingVertical: 5, borderRadius: 8 }, dueText: { color: "#E17C2C", fontSize: 10, fontWeight: "800" },
+  quickGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 }, quickAction: { width: "48%", backgroundColor: "#FFF", borderRadius: 16, padding: 14, flexDirection: "row", alignItems: "center" }, quickIcon: { width: 35, height: 35, borderRadius: 11, backgroundColor: "#EEF3FF", alignItems: "center", justifyContent: "center" }, quickLabel: { color: "#304466", fontSize: 13, fontWeight: "700", marginLeft: 10 },
 });

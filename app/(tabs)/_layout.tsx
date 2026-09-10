@@ -17,14 +17,14 @@ export default function TabLayout() {
       tabBarStyle: { height: 72, paddingTop: 8, paddingBottom: 10, backgroundColor: '#fff', borderTopColor: '#e6ebf2' },
     }}>
       <Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: ({ color, focused }) => <TabIcon name="house.fill" color={color} focused={focused} /> }} />
+      <Tabs.Screen name="explore" options={{ title: 'Courses', tabBarIcon: ({ color, focused }) => <TabIcon name="book.fill" color={color} focused={focused} /> }} />
       <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: ({ color, focused }) => <TabIcon name="person.fill" color={color} focused={focused} /> }} />
-      <Tabs.Screen name="settings" options={{ title: 'Settings', tabBarIcon: ({ color, focused }) => <TabIcon name="gearshape.fill" color={color} focused={focused} /> }} />
-      <Tabs.Screen name="explore" options={{ href: null }} />
+      <Tabs.Screen name="settings" options={{ href: null }} />
     </Tabs>
   );
 }
 
-function TabIcon({ name, color, focused }: { name: 'house.fill' | 'person.fill' | 'gearshape.fill'; color: string; focused: boolean }) {
+function TabIcon({ name, color, focused }: { name: 'house.fill' | 'person.fill' | 'gearshape.fill' | 'book.fill'; color: string; focused: boolean }) {
   return (
     <View style={[styles.iconContainer, focused && styles.activeIconContainer]}>
       <IconSymbol size={23} name={name} color={color} />
