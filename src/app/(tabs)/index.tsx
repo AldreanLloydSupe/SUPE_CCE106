@@ -21,6 +21,10 @@ export default function Home() {
       <Text style={styles.title}>Hello, Aldrean Lloyd Supe!</Text>
       <Text style={styles.subtitle}>Find something worth showing up for this week.</Text>
 
+      <Link href="/lab08" style={styles.attendanceLink}>
+        Open Attendance List →
+      </Link>
+
       <View style={styles.infoGrid}>
         <StudentDetail value="5" label="Subjects" compact={narrowScreen} />
         <StudentDetail value="3rd" label="Year Level" compact={narrowScreen} />
@@ -68,6 +72,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 6,
     marginBottom: 18,
+  },
+  attendanceLink: {
+    backgroundColor: '#16324F',
+    borderRadius: 12,
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '800',
+    marginBottom: 18,
+    overflow: 'hidden',
+    paddingHorizontal: 16,
+    paddingVertical: 14,
   },
   infoGrid: {
     flexDirection: 'row',

@@ -11,6 +11,7 @@ export default function RootLayout() {
           headerStyle: { backgroundColor: '#F7FAFC' },
         }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="lab08" options={{ title: 'Attendance' }} />
         <Stack.Screen name="event/[id]" options={{ title: 'Event details' }} />
       </Stack>
     </>
