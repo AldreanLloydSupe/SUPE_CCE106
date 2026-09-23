@@ -262,56 +262,58 @@ export default function StudentPortalScreen() {
                 onChange={setActiveSection}
               />
               {activeSection === 'profile' ? (
-                <>
+                <View style={styles.profileContent}>
                   <View style={styles.profileCard}>
-                <View style={styles.profileHeader}>
-                  <View style={styles.avatar}>
-                    <Text style={styles.avatarText}>
-                      {student.fullName
-                        .split(' ')
-                        .map((part) => part[0])
-                        .slice(0, 2)
-                        .join('')
-                        .toUpperCase()}
-                    </Text>
+                    <View style={styles.profileHeader}>
+                      <View style={styles.avatar}>
+                        <Text style={styles.avatarText}>
+                          {student.fullName
+                            .split(' ')
+                            .map((part) => part[0])
+                            .slice(0, 2)
+                            .join('')
+                            .toUpperCase()}
+                        </Text>
+                      </View>
+                      <View style={styles.profileHeading}>
+                        <Text style={styles.studentName}>{student.fullName}</Text>
+                        <Text style={styles.studentEmail}>{student.email}</Text>
+                      </View>
+                    </View>
+
+                    <View style={styles.roleBadge}>
+                      <Text style={styles.roleText}>
+                        {student.role.toUpperCase()}
+                      </Text>
+                      <Text style={styles.roleDot}>  /  ACTIVE SESSION</Text>
+                    </View>
+
+                    <View style={styles.divider} />
+                    <ProfileRow label="PROGRAM" value={student.program} />
+                    <ProfileRow label="YEAR LEVEL" value={student.year} />
+                    <ProfileRow label="STUDENT ID" value={student.id} />
                   </View>
-                  <View style={styles.profileHeading}>
-                    <Text style={styles.studentName}>{student.fullName}</Text>
-                    <Text style={styles.studentEmail}>{student.email}</Text>
-                  </View>
+
+                  {error ? <ErrorMessage message={error} /> : null}
+
+                  <Pressable
+                    accessibilityRole="button"
+                    disabled={submitting}
+                    onPress={() => void refreshProfile()}
+                    style={({ pressed }) => [
+                      styles.secondaryButton,
+                      pressed && styles.buttonPressed,
+                    ]}
+                  >
+                    {submitting ? (
+                      <ActivityIndicator color={colors.navy} />
+                    ) : (
+                      <Text style={styles.secondaryButtonText}>
+                        REFRESH PROTECTED PROFILE
+                      </Text>
+                    )}
+                  </Pressable>
                 </View>
-
-                <View style={styles.roleBadge}>
-                  <Text style={styles.roleText}>{student.role.toUpperCase()}</Text>
-                  <Text style={styles.roleDot}>  /  ACTIVE SESSION</Text>
-                </View>
-
-                <View style={styles.divider} />
-                <ProfileRow label="PROGRAM" value={student.program} />
-                <ProfileRow label="YEAR LEVEL" value={student.year} />
-                <ProfileRow label="STUDENT ID" value={student.id} />
-              </View>
-
-              {error ? <ErrorMessage message={error} /> : null}
-
-              <Pressable
-                accessibilityRole="button"
-                disabled={submitting}
-                onPress={() => void refreshProfile()}
-                style={({ pressed }) => [
-                  styles.secondaryButton,
-                  pressed && styles.buttonPressed,
-                ]}
-              >
-                {submitting ? (
-                  <ActivityIndicator color={colors.navy} />
-                ) : (
-                  <Text style={styles.secondaryButtonText}>
-                    REFRESH PROTECTED PROFILE
-                  </Text>
-                )}
-              </Pressable>
-                </>
               ) : (
                 <QuoteAppView />
               )}
@@ -715,8 +717,12 @@ const styles = StyleSheet.create({
     marginTop: 7,
   },
   dashboard: {
+    alignItems: 'stretch',
     flex: 1,
     justifyContent: 'center',
+  },
+  profileContent: {
+    width: '100%',
   },
   portalNavigation: {
     flexDirection: 'row',
