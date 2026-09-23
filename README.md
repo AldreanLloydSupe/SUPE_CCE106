@@ -1,50 +1,41 @@
-# Welcome to your Expo app 👋
+# CCE106 Student Portal
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This repository contains the Quotes app and a practical authenticated Student Portal built with Expo SDK 57.
 
-## Get started
+## Run the app
 
-1. Install dependencies
+Open two terminals in the project folder.
 
-   ```bash
-   npm install
-   ```
+Terminal 1 starts the temporary API:
 
-2. Start the app
+    npm run start:api
 
-   ```bash
-   npx expo start
-   ```
+Terminal 2 starts Expo:
 
-In the output, you'll find options to open the app in a
+    npx expo start
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+Open the app on an Android or iOS device connected to the same Wi-Fi as the computer running the API. The app uses the Expo development host address to contact the local server on port 3000.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Demo account
 
-## Get a fresh project
+- Email: student@cce106.edu.ph
+- Password: CCE106pass!
 
-When you're ready, run:
+The API issues a 30-minute Bearer token. On Android and iOS, the app stores the token with Expo SecureStore, restores the session on launch, requests the protected profile, and clears local and server session state on logout.
 
-```bash
-npm run reset-project
-```
+This is a classroom demo API. Users, tokens, and quotes are stored in memory, so restarting the server invalidates existing sessions.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Postman routes
 
-## Learn more
+- GET http://localhost:3000/ lists available routes and demo credentials.
+- GET http://localhost:3000/health checks the API.
+- POST http://localhost:3000/api/auth/login accepts JSON: {"email":"student@cce106.edu.ph","password":"CCE106pass!"}.
+- GET http://localhost:3000/api/profile requires Authorization: Bearer <accessToken>.
+- POST http://localhost:3000/api/auth/logout requires the same Bearer header.
+- GET http://localhost:3000/api/quotes/random returns one quote.
+- GET http://localhost:3000/api/quotes returns all quotes.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Repository branches
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Qoutes-App contains the Quotes mobile app and quote API.
+- Student-Portal contains the authenticated portal and both sets of API routes.

@@ -5,11 +5,11 @@ import 'react-native-reanimated';
 export default function RootLayout() {
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: '#0B1220' },
+          contentStyle: { backgroundColor: '#EEF4F7' },
         }}
       >
         <Stack.Screen name="(tabs)" />
